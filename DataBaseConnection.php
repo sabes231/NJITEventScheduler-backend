@@ -151,12 +151,15 @@
         $query = "insert into `Events` (ID, Title, Submitter, startTime, startDate, Place, Organization, link, Image, EventName, endTime, EndDate, Description, Approved) Values (".$Event->ID.", '".$Event->Title." ', '".$Event->Submitter." ', TIME '".date("H:i", strtotime($Event->startTime))."' , DATE '".$Event->startDate."', '".$Event->Place." ', '".$Event->Organization." ', '".$Event->link." ', '".$Event->Image." ', '".$Event->EventName." ', '".date("H:i", strtotime($Event->EndTime))."', DATE '".$Event->EndDate."', '".$Event->Description." ', ".$Event->Approved.")";
       }
     
-    #echo $query;
-  
-      if ($this->connection->query($query) === TRUE) {
-        echo "New record created successfully";
+        # echo $query;
+        #mysql_insert_id()
+      if (mysqli_query($this->connection,$query) === TRUE) {
+          $lastID = mysqli_insert_id($this->connection);
+          #  echo "Inserted ".$lastID;
+        echo json_encode(array('EventID'=> $lastID));
       } else {
-        echo "Error: " . $query . "<br>" . $this->connection->error;
+          #      echo 'Error';
+        echo json_encode(array('EventID'=> -1));
       }
     
     }
